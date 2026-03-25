@@ -1,0 +1,9 @@
+node_modules/
+.next/
+out/
+.env
+.env.local
+generated/
+public/uploads/audio/
+public/uploads/images/
+*.tsbuildinfo

@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Song {
+  id          String   @id @default(cuid())
+  title       String
+  lyrics      String?  @db.Text
+  about       String?  @db.Text
+  status      Status   @default(WIP)
+  mp3Url      String?
+  mp3Filename String?
+  imageUrl    String?
+  imageFilename String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tags        SongTag[]
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  color String @default("#ec4899")
+
+  songs SongTag[]
+}
+
+model SongTag {
+  songId String
+  tagId  String
+
+  song Song @relation(fields: [songId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([songId, tagId])
+}
+
+enum Status {
+  COMPLETED
+  WIP
+}
